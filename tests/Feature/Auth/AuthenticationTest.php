@@ -3,13 +3,15 @@
 use App\Models\User;
 use Laravel\Fortify\Features;
 
-test('login screen can be rendered', function () {
+test('login screen shows the google sign-in button', function () {
     $response = $this->get(route('login'));
 
     $response->assertOk();
+    $response->assertSee(route('auth.google.redirect'));
+    $response->assertDontSee('name="password"', escape: false);
 });
 
-test('users can authenticate using the login screen', function () {
+test('users can not authenticate with email and password', function () {
     $user = User::factory()->create();
 
     $response = $this->post(route('login.store'), [
@@ -17,11 +19,9 @@ test('users can authenticate using the login screen', function () {
         'password' => 'password',
     ]);
 
-    $response
-        ->assertSessionHasNoErrors()
-        ->assertRedirect(route('dashboard', absolute: false));
+    $response->assertSessionHasErrorsIn('email');
 
-    $this->assertAuthenticated();
+    $this->assertGuest();
 });
 
 test('users can not authenticate with invalid password', function () {

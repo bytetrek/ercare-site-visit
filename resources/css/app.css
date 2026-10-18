@@ -9,7 +9,31 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Brand colors from the client demo: blue-grey "ink" neutrals and a teal "brand" accent */
+    --color-ink-50: #f4f7f9;
+    --color-ink-100: #e7edf1;
+    --color-ink-200: #cfd9e0;
+    --color-ink-300: #a8b8c4;
+    --color-ink-400: #7a8e9d;
+    --color-ink-500: #5a6e7d;
+    --color-ink-600: #455766;
+    --color-ink-700: #364553;
+    --color-ink-800: #233240;
+    --color-ink-900: #14212c;
+    --color-ink-950: #0b151d;
+
+    --color-brand-50: #edfaf8;
+    --color-brand-100: #d2f3ee;
+    --color-brand-200: #a6e6dc;
+    --color-brand-300: #6fd1c4;
+    --color-brand-400: #3cb6a8;
+    --color-brand-500: #1f9a8d;
+    --color-brand-600: #157c72;
+    --color-brand-700: #14635c;
+    --color-brand-800: #144f4a;
+    --color-brand-900: #13423e;
 
     --color-zinc-50: #fafafa;
     --color-zinc-100: #f5f5f5;
@@ -23,16 +47,16 @@
     --color-zinc-900: #171717;
     --color-zinc-950: #0a0a0a;
 
-    --color-accent: var(--color-neutral-800);
-    --color-accent-content: var(--color-neutral-800);
+    --color-accent: var(--color-brand-600);
+    --color-accent-content: var(--color-brand-600);
     --color-accent-foreground: var(--color-white);
 }
 
 @layer theme {
     .dark {
-        --color-accent: var(--color-white);
-        --color-accent-content: var(--color-white);
-        --color-accent-foreground: var(--color-neutral-800);
+        --color-accent: var(--color-brand-500);
+        --color-accent-content: var(--color-brand-300);
+        --color-accent-foreground: var(--color-white);
     }
 }
 

@@ -36,6 +36,12 @@ class FortifyServiceProvider extends ServiceProvider
     private function configureActions(): void
     {
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+
+        // Users sign in with Google only (see GoogleAuthController),
+        // so email + password login always fails.
+        Fortify::authenticateUsing(function (Request $request) {
+            return null;
+        });
     }
 
     /**

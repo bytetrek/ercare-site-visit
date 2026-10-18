@@ -143,7 +143,7 @@ return [
     */
 
     'features' => [
-        Features::resetPasswords(),
+        // Users sign in with Google, so password reset is turned off.
     ],
 
 ];
