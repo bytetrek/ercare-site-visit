@@ -16,6 +16,20 @@
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
+
+                @can('manage-users')
+                    <flux:sidebar.group :heading="__('Administration')" class="grid">
+                        <flux:sidebar.item icon="users" :href="route('admin.users')" :current="request()->routeIs('admin.users')" wire:navigate>
+                            {{ __('Users') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="map-pin" :href="route('admin.facilities')" :current="request()->routeIs('admin.facilities')" wire:navigate>
+                            {{ __('Facilities') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="lock-closed" :href="route('admin.access')" :current="request()->routeIs('admin.access')" wire:navigate>
+                            {{ __('Facility access') }}
+                        </flux:sidebar.item>
+                    </flux:sidebar.group>
+                @endcan
             </flux:sidebar.nav>
 
             <flux:spacer />
