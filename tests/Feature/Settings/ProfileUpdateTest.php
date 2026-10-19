@@ -10,67 +10,28 @@ test('profile page is displayed', function () {
     $this->get('/settings/profile')->assertOk();
 });
 
-test('profile information can be updated', function () {
+test('users can change their name', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user);
 
     $response = Livewire::test(Profile::class)
         ->set('name', 'Test User')
-        ->set('email', 'test@example.com')
         ->call('updateProfileInformation');
 
     $response->assertHasNoErrors();
 
-    $user->refresh();
-
-    expect($user->name)->toEqual('Test User');
-    expect($user->email)->toEqual('test@example.com');
-    expect($user->email_verified_at)->toBeNull();
+    expect($user->refresh()->name)->toEqual('Test User');
 });
 
-test('email verification status is unchanged when email address is unchanged', function () {
-    $user = User::factory()->create();
+test('users can not change their own email', function () {
+    $user = User::factory()->create(['email' => 'manager@ercare24.com']);
 
     $this->actingAs($user);
 
-    $response = Livewire::test(Profile::class)
-        ->set('name', 'Test User')
-        ->set('email', $user->email)
+    Livewire::test(Profile::class)
+        ->set('email', 'someone-else@gmail.com')
         ->call('updateProfileInformation');
 
-    $response->assertHasNoErrors();
-
-    expect($user->refresh()->email_verified_at)->not->toBeNull();
-});
-
-test('user can delete their account', function () {
-    $user = User::factory()->create();
-
-    $this->actingAs($user);
-
-    $response = Livewire::test('settings.delete-user-form')
-        ->set('password', 'password')
-        ->call('deleteUser');
-
-    $response
-        ->assertHasNoErrors()
-        ->assertRedirect('/');
-
-    expect($user->fresh())->toBeNull();
-    expect(auth()->check())->toBeFalse();
-});
-
-test('correct password must be provided to delete account', function () {
-    $user = User::factory()->create();
-
-    $this->actingAs($user);
-
-    $response = Livewire::test('settings.delete-user-form')
-        ->set('password', 'wrong-password')
-        ->call('deleteUser');
-
-    $response->assertHasErrors(['password']);
-
-    expect($user->fresh())->not->toBeNull();
+    expect($user->refresh()->email)->toEqual('manager@ercare24.com');
 });

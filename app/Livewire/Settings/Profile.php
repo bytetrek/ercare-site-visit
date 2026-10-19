@@ -15,6 +15,10 @@ class Profile extends Component
 
     public string $name = '';
 
+    /**
+     * Shown on the page only. Users can't change their own email, because it
+     * is the email the admin whitelisted for Google sign-in.
+     */
     public string $email = '';
 
     /**
@@ -27,20 +31,17 @@ class Profile extends Component
     }
 
     /**
-     * Update the profile information for the currently authenticated user.
+     * Update the name of the currently authenticated user.
      */
     public function updateProfileInformation(): void
     {
         $user = Auth::user();
 
-        $validated = $this->validate($this->profileRules($user->id));
+        $validated = $this->validate([
+            'name' => $this->nameRules(),
+        ]);
 
-        $user->fill($validated);
-
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
-        }
-
+        $user->name = $validated['name'];
         $user->save();
 
         Flux::toast(variant: 'success', text: __('Profile updated.'));

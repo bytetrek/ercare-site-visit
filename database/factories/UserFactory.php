@@ -87,9 +87,4 @@ class UserFactory extends Factory
             'google_id' => fake()->unique()->numerify('#########'),
         ]);
     }
-
-    /**
-     * Indicate that the model has two-factor authentication configured.
-     */
-    public function withTwoFactor(): static {}
 }

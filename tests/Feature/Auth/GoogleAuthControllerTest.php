@@ -62,6 +62,28 @@ test('a returning user keeps their name but gets a fresh avatar', function () {
     ]);
 });
 
+test('a user added by hand with an empty google id can sign in and gets linked', function () {
+    $user = User::factory()->create([
+        'email' => 'manager@ercare24.com',
+        'google_id' => '',
+    ]);
+
+    Socialite::fake('google', GoogleUser::fake([
+        'id' => 'google-123',
+        'email' => 'manager@ercare24.com',
+        'email_verified' => true,
+    ]));
+
+    $response = $this->get(route('auth.google.callback'));
+
+    $response->assertRedirect(route('dashboard'));
+    $this->assertAuthenticatedAs($user);
+    $this->assertDatabaseHas('users', [
+        'id' => $user->id,
+        'google_id' => 'google-123',
+    ]);
+});
+
 test('the email from google is matched without caring about upper or lower case', function () {
     $user = User::factory()->create(['email' => 'manager@ercare24.com']);
 

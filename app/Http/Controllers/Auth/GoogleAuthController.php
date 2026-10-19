@@ -57,14 +57,18 @@ class GoogleAuthController extends Controller
                 ->withErrors(['google' => __('This Google account is not on the approved list. Ask an ERCare24 admin to add your email.')]);
         }
 
+        // filled() treats NULL and an empty string the same, because a row added
+        // by hand in phpMyAdmin can save an empty google_id as '' instead of NULL.
+        $isLinkedToGoogle = filled($user->google_id);
+
         // Once an email is linked to a Google account, no other Google account may use it.
-        if ($user->google_id !== null && $user->google_id !== $googleUser->getId()) {
+        if ($isLinkedToGoogle && $user->google_id !== $googleUser->getId()) {
             return redirect()->route('login')
                 ->withErrors(['google' => __('This Google account is not on the approved list. Ask an ERCare24 admin to add your email.')]);
         }
 
         // First sign-in: link the Google account and use the name from Google.
-        if ($user->google_id === null) {
+        if (! $isLinkedToGoogle) {
             $user->google_id = $googleUser->getId();
 
             if ($googleUser->getName()) {
